@@ -1,12 +1,19 @@
-import express, { json } from 'express'
-import cors from 'cors'
-//import
+import express from "express";
+import "express-async-errors";
+import cors from "cors";
+import dotenv from "dotenv";
+import errorHandler from "./middlewares/errorHandler.js";
+import router from "./Router/indexRouter.js";
 
-const app = express()
-app.use(cors())
-app.use(json());
+dotenv.config();
 
+const app = express();
 
-const PORT: number = 5000
+app.use(express.json());
+app.use(cors());
+app.use(router);
+app.use(errorHandler);
 
-app.listen(5000, ()=> console.log(`subiu na porta ${PORT}`))
+app.listen(process.env.PORT, () => {
+	console.log("subiu na porta " + process.env.PORT);
+});
