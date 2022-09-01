@@ -4,6 +4,7 @@ import { findById } from "../repositories/employeeRepository.js";
 import { findByTypeAndEmployeeId,TransactionTypes,insert, } from "../repositories/cardRepository.js";
 import Cryptr from "cryptr";
 import dotenv from "dotenv";
+import * as cardRepository from "../repositories/cardRepository.js"
 
 dotenv.config();
 
@@ -69,4 +70,44 @@ async function expireDate() {
 	const month = expireDate.getMonth();
 
 	return `${month}/${year.slice(-2)}`;
+}
+
+export async function activateCard(id:number, newPassword:string, code: string) {
+	
+	const cryptr = new Cryptr(process.env.SECRET);
+	const card = await cardRepository.findById(id)
+
+	if(!card)
+		throw {code: "NotFound", message: "Não existe esse cartão"}
+
+	if(checkExpirationDate(card.expirationDate))
+		throw {code: "BadRequest", message: "O cartão está vencido"}
+
+	if(card.password)
+		throw {code: "BadRequest", message: "O cartão está ativo"}
+	
+	const cvc = cryptr.decrypt(card.securityCode);
+	console.log(cvc)
+	if(cvc!==code)
+		throw {code: "Anauthorized", message: "O Código de Verificação de Cartão (CVC) está errado"}
+	
+	if(newPassword.length !== 4)
+		throw {code: "WrongType", message: "A senha precisa ter 4 (quatro) dígitos"}
+
+	const password = cryptr.encrypt(newPassword);
+	await cardRepository.update(id, { password });
+
+}
+
+function checkExpirationDate(expirationDate: string) {
+	const date = new Date();
+	const year = String(date.getFullYear());
+	const month = date.getMonth();
+	const actualDate = `${month}/${year.slice(-2)}`;
+
+	if (actualDate > expirationDate) {
+		return true;
+	} else {
+		return false;
+	}
 }

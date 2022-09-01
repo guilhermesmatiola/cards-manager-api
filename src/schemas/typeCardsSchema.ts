@@ -8,7 +8,7 @@ const typeCards = Joi.object({
 		"education",
 		"health"
 	).required(),
-	id: Joi.number(),
+	id: Joi.number().required(),
 });
 
 export default typeCards;
