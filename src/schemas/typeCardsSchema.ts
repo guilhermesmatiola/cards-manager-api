@@ -3,7 +3,7 @@ import Joi from "joi";
 const typeCards = Joi.object({
 	type: Joi.any().valid(
 		"groceries",
-		"restaurants",
+		"restaurant",
 		"transport",
 		"education",
 		"health"

@@ -30,6 +30,14 @@ export async function find() {
   return result.rows;
 }
 
+export async function findByEmployeeId(employeeId: number) {
+	const result = await connection.query<Card>(
+		`SELECT * FROM cards WHERE "employeeId" = $1 AND password IS NOT NULL`,
+		[employeeId]
+	);
+	return result.rows;
+}
+
 export async function findById(id: number) {
   const result = await connection.query<Card, [number]>(
     "SELECT * FROM cards WHERE id=$1",
