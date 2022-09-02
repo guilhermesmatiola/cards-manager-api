@@ -8,5 +8,5 @@ export async function rechargeCard(req: Request, res: Response) {
 
 	await rechargeServices.rechargeCard(Number(id), Number(data.value), apikey);
 
-	res.status(201).send("Recarga efetuda.");
+	res.status(201).send("Recarga efetuada.");
 }
