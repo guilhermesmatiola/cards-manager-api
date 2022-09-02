@@ -28,3 +28,13 @@ export async function sendCards(req:Request, res: Response) {
 
     res.status(200).send(card)
 }
+
+export async function sendBalance(req: Request, res: Response) {
+	const { id } = req.params;
+
+    //console.log()
+
+	const balance = await cardsServices.sendBalance(Number(id));
+
+	res.status(200).send(balance);
+}

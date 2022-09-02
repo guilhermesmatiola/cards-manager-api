@@ -5,6 +5,8 @@ import { findByTypeAndEmployeeId,TransactionTypes,insert, } from "../repositorie
 import Cryptr from "cryptr";
 import dotenv from "dotenv";
 import * as cardRepository from "../repositories/cardRepository.js"
+import * as rechargeRepository from "../repositories/rechargeRepository.js";
+import * as paymentRepository from "../repositories/paymentRepository.js";
 
 dotenv.config();
 
@@ -136,4 +138,28 @@ export async function sendCards(id: number, passwords: string[]) {
     });
 	
     return { cards: sendInformations };
+}
+
+export async function sendBalance(id: number) {
+	
+	const transactions = await paymentRepository.findByCardId(id);
+    const recharges = await rechargeRepository.findByCardId(id)
+
+
+    const totalTransactions: any = sumValues(transactions, "amount")
+    const totalRecharge: any = sumValues(recharges, "amount")
+
+    const balance: number = totalRecharge - totalTransactions;
+    return {
+        balance,
+        transactions,
+        recharges
+    }
+}
+function sumValues(array: any[], key: string): number {
+
+    const keyValues: any[] = array.map(el => el[key])
+
+    return keyValues.reduce((current: number, sum: number) => sum + current, 0);
+
 }
