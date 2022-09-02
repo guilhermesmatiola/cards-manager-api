@@ -1,9 +1,11 @@
 # projeto18-valex
 
 rota criacao de cartao: cardsRouter.post("/cards", verifyApiKey, validateSchema(typeCards), newCard);
+
 necessita header: x-api-key zadKLNx.DzvOVjQH01TumGl2urPjPQSxUbf67vs0
 
 onde "type" : pode ser education, groceries, restaurant, transport, health
+
 onde "id"   :   é o id do usuário, no caso 1 ou 2 (passados pelo script)
 
 ex body:
