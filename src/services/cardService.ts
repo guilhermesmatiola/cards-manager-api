@@ -102,7 +102,7 @@ export async function activateCard(id:number, newPassword:string, code: string) 
 
 }
 
-function checkExpirationDate(expirationDate: string) {
+export function checkExpirationDate(expirationDate: string) {
 	const date = new Date();
 	const year = String(date.getFullYear());
 	const month = (date.getMonth() + 1).toString().padStart(2, "0");
@@ -207,8 +207,4 @@ export async function unlockCard(id: number, password: string) {
 		throw { code: "BadRequest", message: "Cartão já está desbloqueado." };
 
 	await cardRepository.update(id, { isBlocked: false });
-}
-
-export async function rechargeCard(id:number, value: number, apiKey: string) {
-	
 }
