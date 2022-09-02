@@ -46,7 +46,7 @@ export async function newCard(
 		securityCode,
 		expirationDate,
 		isVirtual: false,
-		isBlocked: true,
+		isBlocked: false,
 		type,
 	});
 }
@@ -90,7 +90,7 @@ export async function activateCard(id:number, newPassword:string, code: string) 
 		throw {code: "BadRequest", message: "O cartão está ativo"}
 
 	const cvc = cryptr.decrypt(card.securityCode);
-	//console.log(cvc)
+	console.log(cvc)
 	if(cvc!==code)
 		throw {code: "Anauthorized", message: "O Código de Verificação de Cartão (CVC) está errado"}
 	
@@ -162,4 +162,53 @@ function sumValues(array: any[], key: string): number {
 
     return keyValues.reduce((current: number, sum: number) => sum + current, 0);
 
+}
+
+export async function blockCard(id: number, password: string) {
+
+	const cryptr = new Cryptr(process.env.SECRET);
+
+	const card = await cardRepository.findById(id);
+
+	if (!card) throw { code: "NotFound", message: "Cartão não encontrado." };
+
+	const decodedPassword = cryptr.decrypt(card.password);
+
+	if (decodedPassword !== password)
+		throw { code: "Anauthorized", message: "Senha incorreta." };
+
+	if (checkExpirationDate(card.expirationDate))
+		throw { code: "BadRequest", message: "Cartão expirado." };
+
+	if (card.isBlocked)
+		throw { code: "BadRequest", message: "Cartão já bloqueado." };
+
+	await cardRepository.update(id, { isBlocked: true });
+}
+
+export async function unlockCard(id: number, password: string) {
+
+	const cryptr = new Cryptr(process.env.SECRET);
+
+	const card = await cardRepository.findById(id);
+
+	if (!card)
+		throw { code: "NotFound", message: "Cartão não encontrado." };
+
+	const decodedPassword = cryptr.decrypt(card.password);
+
+	if (decodedPassword !== password)
+		throw { code: "Anauthorized", message: "Senha incorreta." };
+
+	if (checkExpirationDate(card.expirationDate))
+		throw { code: "BadRequest", message: "Cartão expirado." };
+
+	if (!card.isBlocked)
+		throw { code: "BadRequest", message: "Cartão já está desbloqueado." };
+
+	await cardRepository.update(id, { isBlocked: false });
+}
+
+export async function rechargeCard(id:number, value: number, apiKey: string) {
+	
 }

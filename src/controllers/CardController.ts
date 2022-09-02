@@ -18,7 +18,7 @@ export async function activateCard(req:Request, res: Response) {
     const body = req.body;
     //console.log(body)
     await cardsServices.activateCard(Number(body.id), body.password, body.cvc);
-   // console.log(body)
+    //console.log(body)
     res.sendStatus(201);
 }
 
@@ -37,4 +37,20 @@ export async function sendBalance(req: Request, res: Response) {
 	const balance = await cardsServices.sendBalance(Number(id));
 
 	res.status(200).send(balance);
+}
+
+export async function blockCard(req: Request, res: Response) {
+	const data = req.body;
+
+	await cardsServices.blockCard(Number(data.id), data.password);
+
+	res.sendStatus(200);
+}
+
+export async function unlockCard(req: Request, res: Response) {
+	const data = req.body;
+
+	await cardsServices.unlockCard(Number(data.id), data.password);
+
+	res.sendStatus(200);
 }
