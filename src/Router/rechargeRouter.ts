@@ -6,6 +6,6 @@ import { rechargeCard } from "../controllers/RechargeController.js";
 
 const rechargeRouter = Router();
 
-rechargeRouter.post("/recharge/:id", verifyApiKey, validateSchema(rechargeValue), rechargeCard);
+rechargeRouter.post("/recharge/:id", verifyApiKey, validateSchema(rechargeValue), rechargeCard); //id do cartao que se quer carregar
 
 export default rechargeRouter;
