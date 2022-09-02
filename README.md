@@ -16,8 +16,11 @@ ex body:
 
 ----------------------------------
 rota ativacao de cartao: cardsRouter.put("/activatecard", activateCard);
+
 onde o "id" é o id do cartao criado
+
 password string de 4 numeros
+
 cvc: pegar com um console.log
 
 ex body:
@@ -29,6 +32,7 @@ ex body:
 
 ----------------------------------
 rota visualizacoa de cartao (*NAO PRECISAVA FAZER*): cardsRouter.get("/card", sendCards); 
+
 onde id é o id do usuário e senha é a do cartao, mas as vezes da erro
 
 ex body:
@@ -41,7 +45,9 @@ ex body:
 rota vizualizacao de saldo e tranzacoes: cardsRouter.get("/cards/:id", sendBalance); 
 
 NÃO PRECISA DE BODY, apenas passar o id do cartao no param, ex: /cards/4
+
 retorna:
+
 {
   "balance": 0,
   "transactions": [
@@ -82,6 +88,7 @@ retorna:
 rota bloqueio de carao: cardsRouter.put("/cards/block", blockCard);
 
 onde "id" é o id do cartão
+
 onde "password" é a senha do cartão
 
 ex body:
@@ -94,6 +101,7 @@ ex body:
 rota DESbloqueio de carao: cardsRouter.put("/cards/unlock", unlockCard);
 
 onde "id" é o id do cartão
+
 onde "password" é a senha do cartão
 
 ex body:
@@ -106,6 +114,7 @@ ex body:
 rota recarregar cartao: rechargeRouter.post("/recharge/:id", verifyApiKey, validateSchema(rechargeValue), rechargeCard); //
 
 necessita header: x-api-key zadKLNx.DzvOVjQH01TumGl2urPjPQSxUbf67vs0
+
 id do cartao que se quer carregar no param
 
 value é o valor da recarga
